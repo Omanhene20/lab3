@@ -1,0 +1,69 @@
+
+1. As the answer to the first exercise, list your name.
+Kwabena Adjei Omanhene-Gyimah
+
+2. What four-letter password corresponds to the following target: 'abccBcrPOxnLU'?
+bear
+
+3. What five-letter password corresponds to the following target: 'xyxMB6gxuiBZg'?
+mango
+
+4. The following hash does not correspond to any password, so your program will exhaust the entire search space without finding any match. Use the time command to measure how long your program takes to search the entire space of five-letter passwords. Hash: 'nomatchingpass'
+Execution time with 1 thread: 3m25.612s
+
+5. Re-run the previous experiment but with two threads, four threads, eight threads, thirteen threads, and twenty-six threads. Record how long each run takes.
+2 threads: 1m43.059s
+4 threads: 0m52.981s
+8 threads: 0m27.013s
+13 threads: 0m17.094s
+26 threads: 0m9.017s
+
+6. Calculate the hash rate your program gets as a result of using multiple threads. The hash rate is defined to be the number of hashes computed divided by the execution time.
+
+Hash count for keysize 1–5: 12,356,630
+
+Threads | Time (s) | Hash Rate (hashes/sec)
+--------|----------|-------------------------
+2       | 103      | ~119,984
+4       | 53       | ~233,144
+8       | 27       | ~457,647
+13      | 17       | ~726,860
+26      | 9        | ~1,373,959
+
+7. Interpret your results. Does your program run twice as fast with two threads? Does it run eight times faster with eight threads? How does this relate to the way you have written your program?
+The speedup is nearly linear up to a point. With two threads, it nearly doubles in speed. At higher thread counts, overhead and core limits prevent linear scaling. Workload is distributed by assigning first characters of the search space to threads, which creates decent—but not perfect—balance.
+
+8. What was the maximum hash rate you recorded?
+1,373,959 hashes/sec (with 26 threads)
+
+9. Assuming each password only uses the 26 lowercase characters, compute the total number of hashes needed to exhaustively search the keyspace for keysizes of one through eight.
+217,180,141,158 hashes
+
+10. Using the last two answers, estimate how long it should take to exhaust each keyspace at your maximum rate? Describe the benefit of increasing key length.
+
+Keysize | Hashes        | Time (sec) | Time (hrs)
+--------|---------------|------------|-------------
+1       | 26            | 0.00002    | negligible
+2       | 702           | 0.0005     | negligible
+3       | 18,278        | 0.0133     | negligible
+4       | 475,254       | 0.35       | < 1 second
+5       | 12,356,630    | 9.0        | ~0.0025 hrs
+6       | 321,272,406   | 234        | ~0.065 hrs (~4 min)
+7       | 8,354,667,006 | 6,078      | ~1.69 hrs
+8       | 208,827,064,576 | 151,981   | ~42.2 hrs
+
+Increasing key length exponentially expands the keyspace, drastically increasing cracking time and improving security.
+
+11. Instead of just using lowercase characters, estimate how long it takes to exhaustively search a keyspace of size six when you are allowed to use lowercase and uppercase (52 characters), digits (62 characters), and common keyboard symbols (93 characters). Use your maximum hash rate.
+
+Character Set   | Hashes            | Time (sec) | Time (hrs)
+----------------|-------------------|------------|------------
+Lower+Upper     | 19,770,609,664    | 14,389     | ~4 hrs
++Digits (62)    | 56,800,235,584    | 41,350     | ~11.5 hrs
++Symbols (93)   | 656,356,768,000   | 477,648    | ~132.7 hrs (~5.5 days)
+
+12. Describe any known bugs or ways that your submission deviates from the above specification.
+No known bugs. The program uses crypt_r for thread safety, divides work among threads correctly, and respects the specified keysize. Some slight imbalance may occur due to simple splitting by first character.
+
+13. Indicate which, if any, extra credit exercises you have attempted.
+Cracked the extra password hashes and implemented the fourth parameter for full ASCII character space search.
